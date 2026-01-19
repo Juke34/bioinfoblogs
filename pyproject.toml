@@ -1,0 +1,29 @@
+[project]
+name = "bioinfoblogs"
+version = "0.1.0"
+description = "A Bluesky publisher for bioinformatics blog feeds"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "feedparser>=6.0.0",
+    "pyyaml>=6.0",
+    "atproto>=0.0.55",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "ruff>=0.1.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_backend"
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+ignore = []
