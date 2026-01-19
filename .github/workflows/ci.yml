@@ -1,0 +1,32 @@
+name: Publier sur Bluesky
+
+on:
+  schedule:
+    # Exécuter tous les jours à 9h UTC
+    - cron: '0 9 * * *'
+  workflow_dispatch: # Permet l'exécution manuelle
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      
+      - name: Install dependencies
+        run: |
+          pip install feedparser atproto pyyaml
+      
+      - name: Publish to Bluesky
+        env:
+          BLUESKY_USERNAME: ${{ secrets.BLUESKY_USERNAME }}
+          BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
+        run: |
+          python bluesky_publisher.py \
+            --username "$BLUESKY_USERNAME" \
+            --password "$BLUESKY_PASSWORD" \
+            --hours 24
