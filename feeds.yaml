@@ -2,6 +2,9 @@
 # Format: chaque entrée doit avoir 'name' et 'url'
 
 feeds:
+  - name : "bioinfo-fr.net"
+    url: "https://bioinfo-fr.net/rss"
+    
   - name: "Dave Tang's blog"
     url: "https://davetang.org/muse/feed/"
   
