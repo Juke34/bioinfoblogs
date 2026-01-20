@@ -147,4 +147,3 @@ To add a new feed, simply edit this file.
 - Always use `--dry-run` first to check what will be published
 - Adjust `--hours` according to your CI execution frequency
 - If CI runs every 24h, use `--hours 24` to avoid duplicates
-- Published URLs are tracked in `posted_urls.txt` to prevent duplicates
