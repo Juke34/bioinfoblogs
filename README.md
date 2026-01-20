@@ -1,3 +1,5 @@
+[![CC BY SA 4.0][cc-by-sa-shield]][cc-by-sa]
+
 # Automatic Publication to Bluesky
 
 This project uses a CI workflow to automatically publish bioinformatics blog posts from selected RSS feeds to a Bluesky account ([https://bsky.app/profile/bioinfoblogs.bsky.social](https://bsky.app/profile/bioinfoblogs.bsky.social)) every day at 09:00 UTC.
@@ -147,3 +149,6 @@ To add a new feed, simply edit this file.
 - Always use `--dry-run` first to check what will be published
 - Adjust `--hours` according to your CI execution frequency
 - If CI runs every 24h, use `--hours 24` to avoid duplicates
+
+[cc-by-sa]: https://creativecommons.org/licenses/by-sa/4.0/
+[cc-by-sa-shield]: https://img.shields.io/badge/License-CC%20BY%20SA-blue.svg
