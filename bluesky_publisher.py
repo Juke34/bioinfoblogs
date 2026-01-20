@@ -1,6 +1,7 @@
 import feedparser
 import yaml
 import calendar
+import argparse
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from email.utils import parsedate_to_datetime
@@ -9,6 +10,7 @@ from atproto import Client, models
 
 # === Config ===
 FEEDS_FILE = Path("feeds.yaml")
+POSTED_FILE = Path("posted_urls.txt")
 MAX_POST_LENGTH = 300  # Bluesky limit
 
 
@@ -31,13 +33,26 @@ def extract_dt(entry) -> datetime:
     return datetime(1970, 1, 1, tzinfo=timezone.utc)
 
 
+def load_posted_urls():
+    """Charger les URLs déjà postées"""
+    if not POSTED_FILE.exists():
+        return set()
+    return set(POSTED_FILE.read_text(encoding="utf-8").splitlines())
+
+
+def save_posted_url(url):
+    """Sauvegarder une URL comme postée"""
+    with open(POSTED_FILE, "a", encoding="utf-8") as f:
+        f.write(f"{url}\n")
+
+
 def create_post_text(item):
     """Créer le texte du post pour Bluesky"""
     title = item["title"]
     source = item["source"]
     link = item["link"]
     
-    # Format: "📝 [Titre] par [Source]\n🔗 [lien]"
+    # Format: "📝 [Titre] par [Source]"
     base_text = f"📝 {title}\n✍️ {source}"
     
     # Vérifier la longueur et tronquer si nécessaire
@@ -68,20 +83,27 @@ def publish_to_bluesky(username, password, dry_run=False, hours_back=24):
     # Charger les URLs déjà postées
     posted_urls = load_posted_urls()
     
-    # === Load feeds ===
-    feeds = []
-    for line in FEEDS_FILE.read_text(encoding="utf-8").splitlines():
-        line = line.strip()
-        if not line or line.startswith("#"):
-            continue
-        if "," in line:
-            name, url = line.split(",", 1)
-      === Load feeds from YAML ===
+    # === Load feeds from YAML ===
     with open(FEEDS_FILE, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
     
-    feeds = [(feed["name"], feed["url"]) for feed in config.get("feeds", [])])
-            title = name.strip() if name.strip() else raw_title.strip() or url
+    feeds = [(feed["name"], feed["url"]) for feed in config.get("feeds", [])]
+    
+    print(f"📡 Récupération de {len(feeds)} flux RSS...")
+    
+    # Calculer la date limite
+    cutoff_time = datetime.now(timezone.utc) - timedelta(hours=hours_back)
+    
+    # === Collecter les articles récents ===
+    items = []
+    
+    for name, url in feeds:
+        try:
+            feed = feedparser.parse(url)
+            
+            # Utiliser le titre du feed ou le nom fourni
+            feed_title = feed.feed.get("title", "").strip()
+            title = name.strip() if name.strip() else feed_title or url
             
             for entry in feed.entries[:5]:
                 dt = extract_dt(entry)
@@ -97,7 +119,11 @@ def publish_to_bluesky(username, password, dry_run=False, hours_back=24):
                 display_date = (
                     entry.get("published")
                     or entry.get("updated")
-                    or dt.st
+                    or dt.strftime("%Y-%m-%d")
+                )
+                
+                items.append(
+                    {
                         "title": entry.title,
                         "link": entry.link,
                         "source": title,
@@ -113,19 +139,6 @@ def publish_to_bluesky(username, password, dry_run=False, hours_back=24):
     items.sort(key=lambda x: x["dt"])
     
     # === Publier les articles ===
-    newly_posted = []
-    
-    for item in items:
-        text, link = create_post_text(item)
-        
-        if dry_run:
-            print(f"\n{'='*60}")
-            print(f"🔍 [DRY RUN] Article à publier:")
-            print(f"Titre: {item['title']}")
-            print(f"Source: {item['source']}")
-            print(f"Date: {item['published']}")
-            print(f"Lien: {link}")
-            print(f"\n📱 Post Bluesky:\n{text}\n🔗 {link}")
     published_count = 0
     
     for item in items:
@@ -153,7 +166,8 @@ def publish_to_bluesky(username, password, dry_run=False, hours_back=24):
                         )
                     )
                 )
-                print(f"✅ Publié: {item['title'][:50]}...")
+                print(f"✅ Publié ({item['published']}): {item['title'][:50]}...")
+                #save_posted_url(item["link"])
                 published_count += 1
             except Exception as e:
                 print(f"❌ Erreur lors de la publication: {e}")
@@ -165,7 +179,18 @@ def publish_to_bluesky(username, password, dry_run=False, hours_back=24):
     elif not items:
         print("\nℹ️  Aucun nouvel article à publier.")
     elif dry_run:
-        print(f"\n🔍 [DRY RUN] {published_count
+        print(f"\n🔍 [DRY RUN] {published_count} article(s) serai(en)t publié(s).")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Publier les nouveaux articles de blogs bioinformatiques sur Bluesky"
+    )
+    parser.add_argument(
+        "--username",
+        required=True,
+        help="Identifiant Bluesky (ex: votre-handle.bsky.social)",
+    )
     parser.add_argument(
         "--password",
         required=True,

@@ -5,6 +5,12 @@ on:
     # Exécuter tous les jours à 9h UTC
     - cron: '0 9 * * *'
   workflow_dispatch: # Permet l'exécution manuelle
+    inputs:
+      dry_run:
+        description: 'Mode test (dry-run) - ne publie pas réellement'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   publish:
@@ -29,4 +35,5 @@ jobs:
           python bluesky_publisher.py \
             --username "$BLUESKY_USERNAME" \
             --password "$BLUESKY_PASSWORD" \
-            --hours 24
+            --hours 24 \
+            ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
