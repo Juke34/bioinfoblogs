@@ -1,16 +1,17 @@
-# Publication automatique sur Bluesky
+# Automatic Publication to Bluesky
 
-Ce projet peut maintenant publier automatiquement les articles de blogs bioinformatiques sur un compte Bluesky.
+This project uses a CI workflow to automatically publish bioinformatics blog posts from selected RSS feeds to a Bluesky account ([https://bsky.app/profile/bioinfoblogs.bsky.social](https://bsky.app/profile/bioinfoblogs.bsky.social)) every day at 09:00 UTC.
+Each run scans for posts published within the previous 24 hours and shares them on Bluesky with rich link previews, ensuring no duplicates are posted and avoiding the need to track previously published entries.
 
-## Configuration
+## Setup
 
-### 1. Installer les dépendances
+### 1. Install dependencies
 
 ```bash
 pip install atproto pyyaml
 ```
 
-Ou ajoutez à votre `pyproject.toml` :
+Or add to your `pyproject.toml`:
 
 ```toml
 dependencies = [
@@ -21,66 +22,64 @@ dependencies = [
 ]
 ```
 
-### 2. Créer un mot de passe d'application Bluesky
+### 2. Create a Bluesky app password
 
-1. Connectez-vous à Bluesky
-2. Allez dans **Settings → App Passwords**
-3. Créez un nouveau mot de passe d'application
-4. Sauvegardez-le en lieu sûr
+1. Log in to Bluesky
+2. Go to **Settings → App Passwords**
+3. Create a new app password
+4. Save it securely
 
-### 3. Configuration des identifiants
+### 3. Configure credentials in GitHub
 
-Créez un fichier `.env` (qui ne sera pas commité grâce au `.gitignore`) :
+1. Go to your repository on GitHub
+2. Navigate to **Settings → Secrets and variables → Actions**
+3. Click **New repository secret**
+4. Add two secrets:
+   - **Name**: `BLUESKY_USERNAME`  
+     **Value**: `your-handle.bsky.social` (without the @)
+   - **Name**: `BLUESKY_PASSWORD`  
+     **Value**: Your Bluesky app password created in step 2
 
-```bash
-cp .env.example .env
-```
+These secrets will be securely used by the GitHub Actions workflow.
 
-Puis modifiez `.env` avec vos identifiants :
+## Usage
 
-```
-BLUESKY_USERNAME=votre-handle.bsky.social
-BLUESKY_PASSWORD=votre-mot-de-passe-application
-```
+### Test mode (dry-run)
 
-## Utilisation
-
-### Mode test (dry-run)
-
-Pour voir ce qui serait publié sans réellement poster :
+To see what would be published without actually posting:
 
 ```bash
 python bluesky_publisher.py \
-  --username votre-handle.bsky.social \
-  --password votre-mot-de-passe \
+  --username your-handle.bsky.social \
+  --password your-app-password \
   --dry-run
 ```
 
-### Publication réelle
+### Real publication
 
 ```bash
 python bluesky_publisher.py \
-  --username votre-handle.bsky.social \
-  --password votre-mot-de-passe
+  --username your-handle.bsky.social \
+  --password your-app-password
 ```
 
 ### Options
 
-- `--hours N` : Récupérer les articles des N dernières heures (défaut: 24)
-- `--dry-run` : Mode test sans publication réelle
+- `--hours N`: Fetch posts from the last N hours (default: 24)
+- `--dry-run`: Test mode without actual publication
 
-## Automatisation avec GitHub Actions
+## Automation with GitHub Actions
 
-Créez `.github/workflows/bluesky.yml` :
+Create `.github/workflows/bluesky.yml`:
 
 ```yaml
-name: Publier sur Bluesky
+name: Publish to Bluesky
 
 on:
   schedule:
-    # Exécuter toutes les 6 heures
+    # Run every 6 hours
     - cron: '0 */6 * * *'
-  workflow_dispatch: # Permet l'exécution manuelle
+  workflow_dispatch: # Allow manual execution
 
 jobs:
   publish:
@@ -108,23 +107,19 @@ jobs:
             --hours 24
 ```
 
-N'oubliez pas d'ajouter vos secrets dans **Settings → Secrets and variables → Actions** :
-- `BLUESKY_USERNAME`
-- `BLUESKY_PASSWORD`
+## How it works
 
-## Fonctionnement
-yaml`
-2. Il récupère uniquement les articles publiés dans les dernières 24h (configurable avec `--hours`)
-3. Il publie chaque article sur Bluesky avec :
-   - Le titre de l'article
-   - La source (nom du blog)
-   - Un lien riche vers l'article
-4. Pas de système de doublons : si le CI tourne toutes les 24h, seuls les nouveaux articles sont récupéré
-5. Il sauvegarde les URLs publiées pour éviter les doublons
+1. The script reads RSS feeds from [feeds.yaml](feeds.yaml)
+2. It fetches only posts published in the last 24 hours (configurable with `--hours`)
+3. It publishes each post on Bluesky with:
+   - The article title
+   - The source (blog name)
+   - A rich link to the article
+4. It saves published URLs to avoid duplicates
 
-## Format des posts
+## Post format
 
-Exemple de post généré :
+Example of a generated post:
 
 ```
 📝 A new method for genome assembly
@@ -132,25 +127,24 @@ Exemple de post généré :
 🔗 https://davetang.org/muse/...
 ```
 
-## Conseils
-Gestion des flux RSS
+## RSS Feed Management
 
-Les flux RSS sont définis dans [feeds.yaml](feeds.yaml) :
+RSS feeds are defined in [feeds.yaml](feeds.yaml):
 
 ```yaml
 feeds:
-  - name: "Nom du blog"
-    url: "https://exemple.com/feed.xml"
+  - name: "Blog name"
+    url: "https://example.com/feed.xml"
   
-  - name: "Autre blog"
-    url: "https://exemple2.com/rss"
+  - name: "Another blog"
+    url: "https://example2.com/rss"
 ```
 
-Pour ajouter un nouveau flux, éditez simplement ce fichier.
+To add a new feed, simply edit this file.
 
-## Conseils
+## Tips
 
-- Utilisez toujours `--dry-run` d'abord pour vérifier ce qui sera publié
-- Ajustez `--hours` selon votre fréquence d'exécution du CI
-- Si le CI tourne toutes les 24h, utilisez `--hours 24` pour éviter les doublons
-- Pas besoin de système de cache, la fenêtre temporelle suffit
+- Always use `--dry-run` first to check what will be published
+- Adjust `--hours` according to your CI execution frequency
+- If CI runs every 24h, use `--hours 24` to avoid duplicates
+- Published URLs are tracked in `posted_urls.txt` to prevent duplicates
