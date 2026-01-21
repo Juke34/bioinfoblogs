@@ -2,8 +2,10 @@
 
 # Automatic Publication to Bluesky
 
-This project uses a CI workflow to automatically publish bioinformatics blog posts from selected RSS feeds to a Bluesky account ([https://bsky.app/profile/bioinfoblogs.bsky.social](https://bsky.app/profile/bioinfoblogs.bsky.social)) every day at 09:00 UTC.
+This project uses a CI workflow to automatically publish bioinformatics blog posts from selected RSS feeds to a Bluesky account every day at 09:00 UTC.
 Each run scans for posts published within the previous 24 hours and shares them on Bluesky with rich link previews, ensuring no duplicates are posted and avoiding the need to track previously published entries.
+
+The use case here is [bioinfoblogs](https://bsky.app/profile/bioinfoblogs.bsky.social).
 
 ## Setup
 
