@@ -81,9 +81,15 @@ name: Publish to Bluesky
 
 on:
   schedule:
-    # Run every 6 hours
-    - cron: '0 */6 * * *'
-  workflow_dispatch: # Allow manual execution
+    # Run every day at 9 a.m. UTC
+    - cron: '0 9 * * *'
+  workflow_dispatch: # Allows manual execution
+    inputs:
+      dry_run:
+        description: 'Dry-run - does not actually publish'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   publish:
@@ -98,7 +104,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install atproto feedparser pyyaml
+          pip install feedparser atproto pyyaml
       
       - name: Publish to Bluesky
         env:
@@ -108,7 +114,8 @@ jobs:
           python bluesky_publisher.py \
             --username "$BLUESKY_USERNAME" \
             --password "$BLUESKY_PASSWORD" \
-            --hours 24
+            --hours 24 \
+            ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
 ```
 
 ## How it works
