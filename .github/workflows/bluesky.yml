@@ -1,13 +1,13 @@
-name: Publier sur Bluesky
+name: Post on Bluesky
 
 on:
   schedule:
-    # Exécuter tous les jours à 9h UTC
+    # Run every day at 9 a.m. UTC
     - cron: '0 9 * * *'
-  workflow_dispatch: # Permet l'exécution manuelle
+  workflow_dispatch: # Allows manual execution
     inputs:
       dry_run:
-        description: 'Mode test (dry-run) - ne publie pas réellement'
+        description: 'Dry-run - does not actually publish'
         required: false
         type: boolean
         default: false
