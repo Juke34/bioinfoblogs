@@ -1,45 +1,9 @@
-# Liste des flux RSS de blogs bioinformatiques
-# Format: chaque entrée doit avoir 'name' et 'url'
+# List of RSS feeds for bioinformatics blogs
+# Format: each entry must have ‘name’ and 'url'
 
 feeds:
-  - name : "bioinfo-fr.net"
-    url: "https://bioinfo-fr.net/rss"
-    
-  - name: "Dave Tang's blog"
-    url: "https://davetang.org/muse/feed/"
-  
-  - name: "Living in an Ivory Basement"
-    url: "http://ivory.idyll.org/blog/feeds/all.atom.xml"
-  
-  - name: "Eric Kernfeld"
-    url: "https://ekernf01.github.io/feed.xml"
-  
-  - name: "JEFworks Lab"
-    url: "http://jefworks-lab.github.io//feed.xml"
-  
-  - name: "Joy McIlvaine, PhD"
-    url: "https://joynyaanga.com/index.xml"
-  
-  - name: "Chatomics on Chatomics"
-    url: "https://divingintogeneticsandgenomics.com/index.xml"
-  
-  - name: "Ryan Wick's bioinformatics blog"
-    url: "https://rrwick.github.io/feed"
-  
-  - name: "Omics! Omics!"
-    url: "https://omicsomics.blogspot.com/feeds/posts/default"
-  
-  - name: "RNA-Seq Blog"
-    url: "https://www.rna-seqblog.com/feed/"
-  
-  - name: "Heng Li's blog"
-    url: "https://lh3.github.io/rss.xml"
-  
-  - name: "Paired Ends (Stephen Turner's blog)"
-    url: "https://blog.stephenturner.us/feed.xml"
-  
-  - name: "John Lees' blog"
-    url: "https://www.johnlees.me/index.xml"
+  - name: "avrilomics"
+    url: "https://avrilomics.blogspot.com/feeds/posts/default"
   
   - name: "Bacterial population genomics blog"
     url: "https://www.bacpop.org/blog/index.xml"
@@ -47,35 +11,71 @@ feeds:
   - name: "BIOINFORMATICAMENTE"
     url: "https://bioinformaticamente.com/feed/"
   
-  - name: "DNAZoo"
-    url: "https://www.dnazoo.org/blog-feed.xml"
-  
-  - name: "avrilomics"
-    url: "https://avrilomics.blogspot.com/feeds/posts/default"
-  
-  - name: "Homolog.us"
-    url: "https://homolog.us/blogs/feed.xml"
-  
-  - name: "Next Generation Technologist"
-    url: "http://yuzuki.org/feed/"
-  
-  - name: "Enseqlopedia"
-    url: "http://enseqlopedia.com/feed/"
-  
-  - name: "The Molecular Ecologist"
-    url: "https://feeds.feedburner.com/molecularecologist/fewY"
+  - name : "Bioinfo-fr.net"
+    url: "https://bioinfo-fr.net/rss"
   
   - name: "Bits of DNA"
     url: "https://liorpachter.wordpress.com/feed/"
   
-  - name: "Genome Spot"
-    url: "https://genomespot.blogspot.com/feeds/posts/default"
-  
-  - name: "What You're Doing Is Rather Desperate"
-    url: "https://nsaunders.wordpress.com/feed/"
-  
   - name: "Blasted Bioinformatics!?"
     url: "https://blastedbio.blogspot.com/feeds/posts/default"
   
+  - name: "Chatomics on Chatomics"
+    url: "https://divingintogeneticsandgenomics.com/index.xml"
+  
+  - name: "Dave Tang's blog"
+    url: "https://davetang.org/muse/feed/"
+  
+  - name: "DNAZoo"
+    url: "https://www.dnazoo.org/blog-feed.xml"
+  
+  - name: "Enseqlopedia"
+    url: "http://enseqlopedia.com/feed/"
+  
+  - name: "Eric Kernfeld"
+    url: "https://ekernf01.github.io/feed.xml"
+  
+  - name: "Genome Spot"
+    url: "https://genomespot.blogspot.com/feeds/posts/default"
+  
   - name: "Gigabase or gigabyte"
     url: "https://wdecoster.github.io/gigabaseorgigabyte/posts/index.xml"
+  
+  - name: "Heng Li's blog"
+    url: "https://lh3.github.io/rss.xml"
+  
+  - name: "Homolog.us"
+    url: "https://homolog.us/blogs/feed.xml"
+  
+  - name: "JEFworks Lab"
+    url: "http://jefworks-lab.github.io//feed.xml"
+  
+  - name: "John Lees' blog"
+    url: "https://www.johnlees.me/index.xml"
+  
+  - name: "Joy McIlvaine, PhD"
+    url: "https://joynyaanga.com/index.xml"
+  
+  - name: "Living in an Ivory Basement"
+    url: "http://ivory.idyll.org/blog/feeds/all.atom.xml"
+  
+  - name: "Next Generation Technologist"
+    url: "http://yuzuki.org/feed/"
+  
+  - name: "Omics! Omics!"
+    url: "https://omicsomics.blogspot.com/feeds/posts/default"
+  
+  - name: "Paired Ends (Stephen Turner's blog)"
+    url: "https://blog.stephenturner.us/feed.xml"
+  
+  - name: "RNA-Seq Blog"
+    url: "https://www.rna-seqblog.com/feed/"
+  
+  - name: "Ryan Wick's bioinformatics blog"
+    url: "https://rrwick.github.io/feed"
+  
+  - name: "The Molecular Ecologist"
+    url: "https://feeds.feedburner.com/molecularecologist/fewY"
+  
+  - name: "What You're Doing Is Rather Desperate"
+    url: "https://nsaunders.wordpress.com/feed/"
