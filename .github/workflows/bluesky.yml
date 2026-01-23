@@ -2,8 +2,8 @@ name: Post on Bluesky
 
 on:
   schedule:
-    # Run every day at 6 a.m. UTC
-    - cron: '0 6 * * *'
+    # Run every day at 3 a.m. UTC - Best time windows (lowest CI load)
+    - cron: '0 3 * * *'
   workflow_dispatch: # Allows manual execution
     inputs:
       dry_run:
