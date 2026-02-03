@@ -48,7 +48,7 @@ feeds:
     url: "https://homolog.us/blogs/feed.xml"
   
   - name: "JEFworks Lab"
-    url: "http://jefworks-lab.github.io//feed.xml"
+    url: "http://jefworks-lab.github.io/feed.xml"
   
   - name: "John Lees' blog"
     url: "https://www.johnlees.me/index.xml"
@@ -58,7 +58,10 @@ feeds:
   
   - name: "Living in an Ivory Basement"
     url: "http://ivory.idyll.org/blog/feeds/all.atom.xml"
-  
+
+  - name: "Mario Fasold's blog"
+    url: "https://mfasold.net/blog/index.xml"
+    
   - name: "Next Generation Technologist"
     url: "http://yuzuki.org/feed/"
   
