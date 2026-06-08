@@ -1,0 +1,35 @@
+name: Repository Keepalive
+
+on:
+  schedule:
+    # Run once a month to keep repository activity alive
+    - cron: '0 5 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update heartbeat file
+        run: |
+          mkdir -p .github/heartbeat
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > .github/heartbeat/last.txt
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/heartbeat/last.txt
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "chore: keepalive [skip ci]"
+          git push
